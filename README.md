@@ -2,11 +2,6 @@
 
 Prevent unauthorized use of privileged accounts. According to various online reports, 80% of breaches involve privileged credentials.
 
-## Goal 
-
-1. Protect digital identities
-2. Minimize attack surfaces
-
 ## Paradigm Shift
 
 1. Use of Managed Digital Identity Services
@@ -14,15 +9,33 @@ Prevent unauthorized use of privileged accounts. According to various online rep
 
 Insecure Implementation => Security Misconfigurations
 
-## Area of Focus
+## Objective 
+
+1. Protect digital identities
+2. Minimize attack surfaces
+
+## What to focus on as a (secure) developer? 
 
 * Security Misconfigurations
 * Hardcoded Secrets
 * Missing Server-Side Validations
 
+## OWASP Mobile Top 10 (2016)
+
+* M1: Improper Platform Usage
+* M2: Insecure Data Storage
+* M3: Insecure Communication
+* M4: Insecure Authentication
+* M5: Insufficient Cryptography
+* M6: Insecure Authorization
+* M7: Client Code Quality
+* M8: Code Tampering
+* M9: Reverse Engineering
+* M10: Extraneous Functionality
+
 ## Hands-On
 
-1. Test for insecure keystore usage
+1. **Test for insecure keystore usage**
    1. Insecure keystore type in use - AndroidKeystore supports hardware-backed containers and should be preferred.
    2. Key not invalidated on new fingerprint enrollment
    3. Keystore accessible without screen unlock
@@ -68,3 +81,6 @@ Insecure Implementation => Security Misconfigurations
 * https://github.com/FSecureLABS/android-keystore-audit/tree/master/frida-scripts
 * https://github.com/FSecureLABS/android-keystore-audit/tree/master/keystorecrypto-app
 * https://github.com/android/security-samples
+* https://cypherpunk.nl/papers/spsm14.pdf
+* https://doridori.github.io/android-security-the-forgetful-keystore/#sthash.GLFXjBai.dpbs
+* https://owasp.org/www-project-mobile-top-10/
