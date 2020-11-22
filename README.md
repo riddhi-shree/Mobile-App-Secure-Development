@@ -14,11 +14,12 @@ Insecure Implementation => Security Misconfigurations
 1. Protect digital identities
 2. Minimize attack surfaces
 
-## What to focus on as a (secure) developer? 
+## Areas to focus on as a (secure) developer? 
 
-* Security Misconfigurations
+* Authentication: No more coding errors. Only security misconfigurations.
 * Hardcoded Secrets
 * Missing Server-Side Validations
+* Improper Error Handling
 
 ## OWASP Mobile Top 10 (2016)
 
@@ -32,6 +33,19 @@ Insecure Implementation => Security Misconfigurations
 * M8: Code Tampering
 * M9: Reverse Engineering
 * M10: Extraneous Functionality
+
+## Things Todo
+
+**Mobile App Authentication**
+
+* Enforce strong password policy
+* Implement API rate limiting
+* Do not include sensitive data in JWT tokens
+* Terminate session on the server side and delete session information stored in the mobile app after the session times out or the user logs out
+
+**Network Communication**
+
+
 
 ## Hands-On
 
@@ -69,6 +83,9 @@ Insecure Implementation => Security Misconfigurations
 
     Refer - https://github.com/android/security-samples
 
+    **Example:**
+    **Transaction signing** requires authentication of the user's approval of critical transactions. Asymmetric cryptography is the best way to implement transaction signing. The app will generate a public/private key pair when the user signs up, then registers the public key on the backend. The private key is securely stored in the KeyStore (Android) or KeyChain (iOS). To authorize a transaction, the backend sends the mobile app a push notification containing the transaction data. The user is then asked to confirm or deny the transaction. After confirmation, the user is prompted to unlock the Keychain (by entering the PIN or fingerprint), and the data is signed with user's private key. The signed transaction is then sent to the server, which verifies the signature with the user's public key.
+
 # References
 
 * https://github.com/riddhi-shree/knowledge-sharing/blob/master/Mobile/Android/README.md
@@ -84,3 +101,16 @@ Insecure Implementation => Security Misconfigurations
 * https://cypherpunk.nl/papers/spsm14.pdf
 * https://doridori.github.io/android-security-the-forgetful-keystore/#sthash.GLFXjBai.dpbs
 * https://owasp.org/www-project-mobile-top-10/
+* https://mobile-security.gitbook.io/mobile-security-testing-guide/general-mobile-app-testing-guide/0x04e-testing-authentication-and-session-management
+* https://www.sjoerdlangkemper.nl/2016/09/28/attacking-jwt-authentication/
+* https://github.com/Sjord/jwtdemo/
+* https://portswigger.net/bappstore/82d6c60490b540369d6d5d01822bdf61
+* https://portswigger.net/bappstore/f923cbf91698420890354c1d8958fee6
+* https://github.com/jmaxxz/jwtbrute
+* https://github.com/Sjord/jwtcrack
+* https://tools.ietf.org/html/rfc6749
+* https://tools.ietf.org/html/draft-ietf-oauth-native-apps-12
+* https://tools.ietf.org/html/rfc6819
+* https://portswigger.net/burp
+* https://www.zaproxy.org/
+* https://www.charlesproxy.com/
