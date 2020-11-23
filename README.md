@@ -68,6 +68,12 @@ Paradigm Shift: **Security Misconfiguration**
 
     ![](images/amazon_cognito/3c_amplifyconfiguration.png)
 
+7. Plug-and-play **login UI** and **authentication service implementation** examples
+
+    ![](images/flutter/2a_flutter_cognito_login.png)
+    ![](images/flutter/2b_java_cognito.png)
+    ![](images/flutter/2c_flutter_auth0_login.png)
+
 ### M2: Insecure Data Storage - Obsolete?
 
 Paradigm Shift: **Security Misconfiguration**
@@ -92,24 +98,26 @@ Paradigm Shift: **Security Misconfiguration**
 
 ### M6: Insecure Authorization
 
-git clone git@github.com:appsecco/VyAPI.git
-
-### M7: Client Code Quality
-
-
-
-### M8: Code Tampering
-
 
 
 ### M9: Reverse Engineering
 
-![](images/amazon_cognito/9a_awsconfigurationJSON.png)
-![](images/amazon_cognito/9b_amplifyconfigurationJSON.png)
-![](images/amazon_cognito/9c_flutter_amplify_configurationFiles.png)
+1. **Hardcoded Secrets**
 
-### M10: Extraneous Functionality
+    * Someone following the (insecure) example mentioned in [this GitHub repo](https://github.com/furaiev/amazon-cognito-identity-dart-2) would probably end up hardcoding sensitive details into the source code.
 
+        ![Insecure example](images/flutter/3_insecureExample.png)
+
+    * The **secure way** to consume Amazon Cognito services is mentioned in the [official Amplify Flutter repository](https://github.com/aws-amplify/amplify-flutter/blob/master/example/lib/main.dart)
+
+        ![Secure example](images/flutter/3b_secureExample.png)
+
+
+2. **Sensitive Configuration Files**
+  
+    ![](images/amazon_cognito/9a_awsconfigurationJSON.png)
+    ![](images/amazon_cognito/9b_amplifyconfigurationJSON.png)
+    ![](images/amazon_cognito/9c_flutter_amplify_configurationFiles.png)
 
 ## Exercise
 
@@ -123,3 +131,5 @@ git clone git@github.com:appsecco/VyAPI.git
 * https://docs.amplify.aws/start/getting-started/auth/q/integration/react#create-authentication-service
 * https://docs.amplify.aws/start/getting-started/add-api/q/integration/flutter#setup-aws-cloud-resources-with-amplify-cli
 * https://github.com/aws-amplify/amplify-flutter
+* https://flutter.dev/docs/deployment/android
+* https://morioh.com/p/8ec7163e826e
