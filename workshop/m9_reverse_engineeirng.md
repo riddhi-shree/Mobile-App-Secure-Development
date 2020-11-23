@@ -1,6 +1,6 @@
 # M9: Reverse Engineering
 
->Paradigm Shift: **Change of Perspective**
+>Paradigm Shift: **A Slight Change of Perspective**
 
 ## What are we looking for?
 
@@ -18,12 +18,11 @@
 
         ![Secure example](../images/flutter/3b_secureExample.png)
 
-
 2. **Bundled Configuration Files**
 
-    Configuration files containing sensitive data can be obtained from the unzipped and/or decoded APK.
+    * Configuration files containing sensitive data can be obtained from the unzipped and/or decoded APK.
   
-    ![Find bundled configuration files](../images/misc/1_bundled_config_files.png)
+        ![Find bundled configuration files](../images/misc/1_bundled_config_files.png)
 
 3. **Application Logic**
 
@@ -31,4 +30,8 @@
 
     ---
 
-    ![](../images/misc/2_app_logic.png)
+    ![App logic](../images/misc/2_app_logic.png)
+
+## References
+
+* 

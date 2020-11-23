@@ -53,10 +53,16 @@
 
     ![amplifyconfiguration](../images/amazon_cognito/3b_amplifyconfiguration.png)
 
-    **How would you protect this file?**
+    **How will you protect the sensitive data stored in this file?**
 
     ![](../images/amazon_cognito/3c_amplifyconfiguration.png)
+
+    A plausible solution is to pass a JSONObject containing the configuration from the `awsconfiguration.dart` file at runtime.
+
+    ![](../images/misc/1b_JSONObject.png)
 
 ## References
 
 * https://docs.amplify.aws/sdk/auth/hosted-ui/q/platform/android
+* [How to protect PoolId in awsconfiguration.json?](https://github.com/aws-amplify/aws-sdk-android/issues/711)
+* https://aws-amplify.github.io/aws-sdk-android/docs/reference/com/amazonaws/mobile/config/AWSConfiguration.html
