@@ -1,25 +1,4 @@
-# Mobile App Secure Development
-
-Prevent unauthorized use of privileged accounts. According to various online reports, 80% of breaches involve privileged credentials.
-
-## Paradigm Shift
-
-1. Use of Managed Digital Identity Services
-2. Use of Managed Data Services
-
-Insecure Implementation => Security Misconfigurations
-
-## Objective 
-
-1. Protect digital identities
-2. Minimize attack surfaces
-
-## Areas to focus on as a (secure) developer? 
-
-* Authentication: No more coding errors. Only security misconfigurations.
-* Hardcoded Secrets
-* Missing Server-Side Validations
-* Improper Error Handling
+# The Changing Face of Mobile App Security
 
 ## OWASP Mobile Top 10 (2016)
 
@@ -34,83 +13,113 @@ Insecure Implementation => Security Misconfigurations
 * M9: Reverse Engineering
 * M10: Extraneous Functionality
 
-## Things Todo
+### M1: Improper Platform Usage
 
-**Mobile App Authentication**
-
-* Enforce strong password policy
-* Implement API rate limiting
-* Do not include sensitive data in JWT tokens
-* Terminate session on the server side and delete session information stored in the mobile app after the session times out or the user logs out
-
-**Network Communication**
+Misuse of Touch ID, the Keychain, Android intents, platform permissions, or other security features that are a part of the mobile operating system
 
 
 
-## Hands-On
 
-1. **Test for insecure keystore usage**
-   1. Insecure keystore type in use - AndroidKeystore supports hardware-backed containers and should be preferred.
-   2. Key not invalidated on new fingerprint enrollment
-   3. Keystore accessible without screen unlock
-   4. Weak cryptography algorithms in use
-   5. Weak/hardcoded password for keystore or keystore entry - The AndroidKeystore is the recommended keystore type but if the application design requires the usage of a software backed keystore then setting a strong user-derived password is advised.
 
-    **Threat:**
-    Android Keystore is considered secure as we cannot access key material. However, an attacker might not actually need the key contents. The Keystore API could be used to retrieve key references, which could be used to initialize the Cipher object and then they could be used to decrypt or encrypt application storage.
+### M3: Insecure Communication
 
-    As an attacker with physical access to the device or a privileged malware can:
-    1. Start the victim application
-    2. Hook the victim application using Frida to execute code within context of the victim application which will do following:
-       * Retrieve reference to the AndroidKeystore key using Keystore API.
-       * Initialize the Cipher object with the retrieved key reference.
-       * Decrypt/Encrypt/Sign data within application storage.
 
-    **Recommendation:**
-    Developers must mark the keystore keys as accessible only after:
-    1. The device has been unlocked.
-    2. Fingerprint or other biometrics have been validated.
 
-    Set `setUserAuthenticationRequired()` to true during key generation. The other important property is `setUserAuthenticationValidityDurationSeconds()`. If it is set to -1 then the key can only be unlocked using Fingerprint or Biometrics. If it is set to any other value, the key can be unlocked using a device screenlock too. For highly sensitive applications like banking apps, password managers or secure messengers setUserAuthenticationValidityDurationSeconds() should not have any value other than -1.
+### M4: Insecure Authentication - Obsolete?
 
-    **Implementation of Secure Local Authentication:**
-    Use **AndroidKeystore**.
-    1. Create the Android keystore key with `setUserAuthenticationRequired` and `setInvalidatedByBiometricEnrollment` set to true. Additionally, `setUserAuthenticationValidityDurationSeconds` should be set to -1.
-    2. Initialize cipher object with keystore key created above.
-    3. Create `BiometricPrompt.CryptoObject` using cipher object from previous step.
-    4. Implement `BiometricPrompt.AuthenticationCallback.onAuthenticationSucceeded` callback which will retrieve cipher object from the parameter and USE this cipher object to decrypt some other crucial data such as session key, or a secondary symmetric key which will be used to decrypt application data.
-    5. Call `BiometricPrompt.authenticate` function with crypto object and callbacks created in steps 3 and 4.
+Paradigm Shift: **Security Misconfiguration**
 
-    Refer - https://github.com/android/security-samples
+![](images/amazon_cognito/0_authenticationWithAmplify.png)
 
-    **Example:**
-    **Transaction signing** requires authentication of the user's approval of critical transactions. Asymmetric cryptography is the best way to implement transaction signing. The app will generate a public/private key pair when the user signs up, then registers the public key on the backend. The private key is securely stored in the KeyStore (Android) or KeyChain (iOS). To authorize a transaction, the backend sends the mobile app a push notification containing the transaction data. The user is then asked to confirm or deny the transaction. After confirmation, the user is prompted to unlock the Keychain (by entering the PIN or fingerprint), and the data is signed with user's private key. The signed transaction is then sent to the server, which verifies the signature with the user's public key.
+*"The Amplify Command Line Interface (CLI) is a unified toolchain to create AWS cloud services for your app."*
+
+1. Initialize **AWS Amplify**
+
+    ![amplify init](images/amazon_cognito/1_amplify_init.png)
+    ![amplify init: success](images/amazon_cognito/2_amplify_init_success.png)
+    ![amplifyconfiguration](images/amazon_cognito/3_amplifyconfiguration.png)
+
+    Note: An empty **configuration file** is created locally.
+
+2. Create an **authentication service**: `amplify add auth`
+
+    ![amplifyconfiguration](images/amazon_cognito/4_add_auth.png)
+
+    ![amplifyconfiguration](images/amazon_cognito/4b_add_auth.png)
+
+3. **Deploy** the authentication service: `amplify push`
+
+    ![amplifyconfiguration](images/amazon_cognito/4c_deploy_auth.png)
+
+4. View the deployed authentication service in **Amplify Console**
+
+    ![Amplify Console](images/amazon_cognito/4d_amplify_console.png)
+    ![User pool](images/amazon_cognito/5_user_pool.png)
+
+5. At this stage, make sure you understand the **user authentication security requirements** and then choose the desired configurations.
+
+    ![](images/amazon_cognito/4e_auth_configuration.png)
+
+6. Also, check the contents of `amplifyconfiguration.dart` file. It now contains sensitive details associated with the deployed authentication service.
+
+    ![amplifyconfiguration](images/amazon_cognito/3b_amplifyconfiguration.png)
+
+    **How would you protect this file?**
+
+    ![](images/amazon_cognito/3c_amplifyconfiguration.png)
+
+### M2: Insecure Data Storage - Obsolete?
+
+Paradigm Shift: **Security Misconfiguration**
+
+1. Create a storage service: `amplify add storage`
+
+    ![amplify add storage](images/amazon_cognito/6_add_storage.png)
+
+2. Make your choices consciously
+
+    ![Configure storage](images/amazon_cognito/6b_configure_storage_service.png)
+    ![](images/amazon_cognito/6c_kind_of_access.png)
+
+3. Push local changes to the cloud: `amplify push`
+
+    ![amplify push](images/amazon_cognito/7_amplify_push.png)
+    ![](images/amazon_cognito/7b_s3buckets.png)
+
+### M5: Insufficient Cryptography
+
+
+
+### M6: Insecure Authorization
+
+git clone git@github.com:appsecco/VyAPI.git
+
+### M7: Client Code Quality
+
+
+
+### M8: Code Tampering
+
+
+
+### M9: Reverse Engineering
+
+![](images/amazon_cognito/9a_awsconfigurationJSON.png)
+![](images/amazon_cognito/9b_amplifyconfigurationJSON.png)
+![](images/amazon_cognito/9c_flutter_amplify_configurationFiles.png)
+
+### M10: Extraneous Functionality
+
+
+## Exercise
+
+1. 
 
 # References
 
-* https://github.com/riddhi-shree/knowledge-sharing/blob/master/Mobile/Android/README.md
-* https://slides.com/riddhishreechaurasia/breaking-an-android-app-in-7-steps/#/4/4
-* https://github.com/appsecco/VyAPI
-* https://github.com/OWASP/MSTG-Hacking-Playground
-* https://github.com/OWASP/owasp-mstg/tree/master/Crackmes
-* https://github.com/nullblr/flutter/blob/master/nullMobileApp/README.md
-* https://labs.f-secure.com/blog/how-secure-is-your-android-keystore-authentication/
-* https://github.com/FSecureLABS/android-keystore-audit/tree/master/frida-scripts
-* https://github.com/FSecureLABS/android-keystore-audit/tree/master/keystorecrypto-app
-* https://github.com/android/security-samples
-* https://cypherpunk.nl/papers/spsm14.pdf
-* https://doridori.github.io/android-security-the-forgetful-keystore/#sthash.GLFXjBai.dpbs
-* https://owasp.org/www-project-mobile-top-10/
-* https://mobile-security.gitbook.io/mobile-security-testing-guide/general-mobile-app-testing-guide/0x04e-testing-authentication-and-session-management
-* https://www.sjoerdlangkemper.nl/2016/09/28/attacking-jwt-authentication/
-* https://github.com/Sjord/jwtdemo/
-* https://portswigger.net/bappstore/82d6c60490b540369d6d5d01822bdf61
-* https://portswigger.net/bappstore/f923cbf91698420890354c1d8958fee6
-* https://github.com/jmaxxz/jwtbrute
-* https://github.com/Sjord/jwtcrack
-* https://tools.ietf.org/html/rfc6749
-* https://tools.ietf.org/html/draft-ietf-oauth-native-apps-12
-* https://tools.ietf.org/html/rfc6819
-* https://portswigger.net/burp
-* https://www.zaproxy.org/
-* https://www.charlesproxy.com/
+* https://github.com/riddhi-shree/knowledge-sharing/blob/master/Mobile/Android/environment_setup/setup_vyapi/README.md
+* https://codifiedsecurity.com/owasp-mobile-top-10-2016-m1-improper-platform-usage/
+* https://docs.amplify.aws/cli
+* https://docs.amplify.aws/start/getting-started/auth/q/integration/react#create-authentication-service
+* https://docs.amplify.aws/start/getting-started/add-api/q/integration/flutter#setup-aws-cloud-resources-with-amplify-cli
+* https://github.com/aws-amplify/amplify-flutter
