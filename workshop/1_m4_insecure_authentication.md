@@ -2,7 +2,11 @@
 
 >Paradigm Shift: **Security Misconfiguration**
 
-## Plug-And-Play Examples
+## BEFORE: Build Everything
+
+[![Without AaaS](../images/misc/5b_WithoutAaaS.png)](https://medium.com/@afegbua/flutter-thursday-13-building-a-user-registration-and-login-process-with-provider-and-external-api-1bb87811fd1d)
+
+## AFTER: Plug-And-Play
 
 * Flutter login UI with Amazon Cognito authentication and authorization services implementation
 
